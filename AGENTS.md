@@ -24,6 +24,7 @@ Use this repository for CVE-2026-43499 work, temporary root reproduction, KASLR 
 ## Commands
 
 ```bash
+./scripts/reproduce.sh -s <serial>       # one-command full reproduction
 ./scripts/check_env.sh -s <serial> --require-target
 ./scripts/run_root.sh -s <serial>              # verified prebuilt
 ./scripts/run_root.sh -s <serial> --build      # rebuild from source

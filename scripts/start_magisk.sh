@@ -24,6 +24,8 @@ SU='/data/local/tmp/su -c'
 "$ADB" -s "$SERIAL" shell '/data/local/tmp/su -c "chmod 755 /data/adb /data/adb/m /data/adb/m/.magisk /data/adb/m/.magisk/device; ln -sf magisk /data/adb/m/su"'
 
 if ! "$ADB" -s "$SERIAL" shell '/data/adb/m/magisk -V' >/dev/null 2>&1; then
+  # The daemon pins its executable inode. Restart after replacing the binary.
+  "$ADB" -s "$SERIAL" shell '/data/local/tmp/su -c "/data/adb/m/magisk --stop"' >/dev/null 2>&1 || true
   "$ADB" -s "$SERIAL" shell '/data/local/tmp/su -c "nohup /data/adb/m/magisk --daemon >/data/local/tmp/magiskd.out 2>&1 &"'
   for _ in 1 2 3 4 5; do
     "$ADB" -s "$SERIAL" shell '/data/adb/m/magisk -V' >/dev/null 2>&1 && break

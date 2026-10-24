@@ -1,5 +1,7 @@
 # Honor 500 (AAP-AN00) Temporary Root Skill
 
+**新用户请先阅读 [START_HERE.md](START_HERE.md)。一键脚本会下载并校验全部物料，然后完成提权、Magisk 安装和验证。**
+
 A reproducible, source-available implementation of **temporary userspace root** on the Honor 500 **AAP-AN00** using a modified Linuxoid CVE-2026-43499 payload. It adapts the exploit to the inline futex call chain in the device's 6.12.38 GKI kernel and includes the successful ARM64 binary, build system, runner, verification scripts, and on-device evidence.
 
 **Verified result:** `uid=0(root)`, `u:r:kernel:s0`, SELinux `Permissive`, and a working `su` client/daemon. No boot image is patched or flashed. Root does not persist across reboot.
@@ -135,6 +137,7 @@ Use only on a device you own or are explicitly authorized to test.
 - [Canonical skill](honor-aap-an00-root/SKILL.md)
 - [Technical reference](honor-aap-an00-root/reference.md)
 - [中文完整复现指南](docs/REPRODUCE.zh-CN.md)
+- [新手一键指南](START_HERE.md)
 - [Firmware and hashes](docs/FIRMWARE.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 - [Runtime Magisk installation](docs/MAGISK.md)

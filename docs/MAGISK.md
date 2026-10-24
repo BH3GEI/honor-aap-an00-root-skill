@@ -19,6 +19,16 @@ GitHub Release `magisk-runtime-v1`：
 
 应用签名与官方版本不同。若系统提示签名不兼容，先卸载旧应用再安装；这会删除 Magisk 应用自身的设置，不影响 `/data/adb` 中的 daemon 文件。
 
+## 一键安装
+
+完成临时 root 后，也可以直接使用一键脚本下载并校验全部物料，然后安装应用和 daemon：
+
+```bash
+./scripts/reproduce.sh
+```
+
+脚本会下载 `firmware-v175` 与 `magisk-runtime-v1` 中的全部文件并检查 SHA-256。若需覆盖不同签名的旧应用，使用 `./scripts/reproduce.sh --replace-magisk`。
+
 ## 安装步骤
 
 ### 1. 先获得临时 root
@@ -45,7 +55,7 @@ export HONOR_SERIAL=<adb-serial>
 
 ```bash
 adb -s "$HONOR_SERIAL" push /path/to/magisk /data/local/tmp/magisk-bin
-adb -s "$HONOR_SERIAL" shell '/data/local/tmp/su -c "mkdir -p /data/adb/m/.magisk/device && cp /data/local/tmp/magisk-bin /data/adb/m/magisk && chmod 755 /data/adb/m/magisk"'
+adb -s "$HONOR_SERIAL" shell '/data/local/tmp/su -c "mkdir -p /data/adb/m/.magisk/device && cp /data/local/tmp/magisk-bin /data/adb/m/magisk.new && mv /data/adb/m/magisk.new /data/adb/m/magisk && chmod 755 /data/adb/m/magisk"'
 ```
 
 ### 4. 启动并验证
