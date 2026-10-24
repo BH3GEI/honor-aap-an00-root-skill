@@ -88,7 +88,7 @@ For one command:
 adb -s "$HONOR_SERIAL" shell '/data/local/tmp/su -c "id"'
 ```
 
-The ordinary `adb shell` remains `uid=2000`; invoke `/data/local/tmp/su` for root. This repository does not install a Magisk manager or an app-level authorization UI.
+The ordinary `adb shell` remains `uid=2000`; invoke `/data/local/tmp/su` for root. The base exploit does not install a boot-persistent Magisk environment; the optional runtime Magisk package is documented in [docs/MAGISK.md](docs/MAGISK.md).
 
 ## Rebuild from source
 
@@ -137,6 +137,7 @@ Use only on a device you own or are explicitly authorized to test.
 - [中文完整复现指南](docs/REPRODUCE.zh-CN.md)
 - [Firmware and hashes](docs/FIRMWARE.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
+- [Runtime Magisk installation](docs/MAGISK.md)
 - [Upstream and attribution](NOTICE.md)
 
 ## License

@@ -563,8 +563,13 @@ static int run_direct_root_stage(void) {
   }
 
   size_t policy_size = 0;
-  if (!direct_reload_selinux_policy(&policy_size)) {
-    return 0;
+  const char *reload_policy = getenv("HONOR_RELOAD_SELINUX_POLICY");
+  if (reload_policy && reload_policy[0] == '1') {
+    if (!direct_reload_selinux_policy(&policy_size)) {
+      return 0;
+    }
+  } else {
+    pr_info("direct selinux policy reload skipped (default)\n");
   }
   int enforcing_after = direct_read_enforcing();
   pr_success("direct credential result uid=%u euid=%u gid=%u egid=%u "

@@ -28,6 +28,7 @@ Use this repository for CVE-2026-43499 work, temporary root reproduction, KASLR 
 ./scripts/run_root.sh -s <serial>              # verified prebuilt
 ./scripts/run_root.sh -s <serial> --build      # rebuild from source
 ./scripts/verify_root.sh -s <serial>
+./scripts/start_magisk.sh -s <serial>       # optional runtime Magisk
 ./scripts/write_root_proof.sh -s <serial>      # optional visible proof
 ```
 

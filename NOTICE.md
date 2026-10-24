@@ -24,6 +24,14 @@ The upstream license is preserved in `LICENSE`. This repository adds the Honor t
 
 The archived project notes also examined the NebuSec / CyberMeowfia CVE-2026-43499 tree and public case matrices. The successful payload in this repository was built and tested from the included modified Linuxoid source; no private CyberMeowfia payload is included or required.
 
+## Magisk runtime package
+
+Magisk v30.7 is used under its upstream license:
+
+- https://github.com/topjohnwu/Magisk
+
+`patches/magisk-refresh.patch` changes state refresh and menu initialization in the Android app. `scripts/patch_magisk_binary.py` changes MAGISKTMP to `/data/adb/m` for this runtime-only setup. The custom APK and daemon are distributed through the `magisk-runtime-v1` Release. They are not part of the upstream Magisk release.
+
 ## Device evidence
 
 The successful execution and independent verification were performed on an Honor AAP-AN00 running the exact firmware listed in `README.md`. Logs are included under `evidence/` with ANSI control sequences retained only where they came from the original payload output.

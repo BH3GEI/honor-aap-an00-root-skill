@@ -1,0 +1,51 @@
+diff --git a/app/apk/src/main/java/com/topjohnwu/magisk/ui/MainActivity.kt b/app/apk/src/main/java/com/topjohnwu/magisk/ui/MainActivity.kt
+index a277224..16dcd6e 100644
+--- a/app/apk/src/main/java/com/topjohnwu/magisk/ui/MainActivity.kt
++++ b/app/apk/src/main/java/com/topjohnwu/magisk/ui/MainActivity.kt
+@@ -75,6 +75,10 @@ class MainActivity : NavigationActivity<ActivityMainMd2Binding>(), SplashScreenH
+     override fun onResume() {
+         super.onResume()
+         splashController.onResume()
++        binding.mainNavigation.menu.apply {
++            findItem(R.id.superuserFragment)?.isEnabled = Info.showSuperUser
++            findItem(R.id.modulesFragment)?.isEnabled = Info.env.isActive && LocalModule.loaded()
++        }
+     }
+
+     @SuppressLint("InlinedApi")
+diff --git a/app/apk/src/main/java/com/topjohnwu/magisk/ui/home/HomeViewModel.kt b/app/apk/src/main/java/com/topjohnwu/magisk/ui/home/HomeViewModel.kt
+index a82b6cc..a4b86ca 100644
+--- a/app/apk/src/main/java/com/topjohnwu/magisk/ui/home/HomeViewModel.kt
++++ b/app/apk/src/main/java/com/topjohnwu/magisk/ui/home/HomeViewModel.kt
+@@ -29,6 +29,7 @@ import com.topjohnwu.magisk.dialog.UninstallDialog
+ import com.topjohnwu.magisk.events.SnackbarEvent
+ import com.topjohnwu.magisk.utils.asText
+ import com.topjohnwu.superuser.Shell
++import com.topjohnwu.superuser.ShellUtils.fastCmdResult
+ import kotlin.math.roundToInt
+ import com.topjohnwu.magisk.core.R as CoreR
+
+@@ -90,6 +91,10 @@ class HomeViewModel(
+     }
+
+     override suspend fun doLoadWork() {
++        val shell = Shell.getShell()
++        Info.isRooted = shell.isRoot || fastCmdResult(shell, "su -c id")
++        Info.init(shell)
++        notifyChange()
+         appState = State.LOADING
+         Info.fetchUpdate(svc)?.apply {
+             appState = when {
+diff --git a/app/core/src/main/java/com/topjohnwu/magisk/core/Info.kt b/app/core/src/main/java/com/topjohnwu/magisk/core/Info.kt
+index 8aa8df5..fc70386 100644
+--- a/app/core/src/main/java/com/topjohnwu/magisk/core/Info.kt
++++ b/app/core/src/main/java/com/topjohnwu/magisk/core/Info.kt
+@@ -85,7 +85,7 @@ object Info {
+     }
+
+     fun init(shell: Shell) {
+-        if (shell.isRoot) {
++        if (Info.isRooted || shell.isRoot) {
+             val v = fastCmd(shell, "magisk -v").split(":")
+             env = Env(
+                 v[0], v.size >= 3 && v[2] == "D",
