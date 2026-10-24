@@ -1,0 +1,13 @@
+=== uptime (detect reboot) ===
+1632.79 12478.82
+=== getenforce ===
+Permissive
+=== id (shell) ===
+uid=2000(shell) gid=2000(shell) groups=2000(shell),1004(input),1007(log),1011(adb),1015(sdcard_rw),1
+=== su presence ===
+-rwxr-xr-x 1 root root 15312 2026-10-24 04:09 /apex/com.android.virt/bin/su
+-rwxr-xr-x 1 root root 15312 2026-10-24 04:09 /data/local/tmp/su
+=== su -c id ===
+uid=0(root) gid=0(root) groups=0(root) context=u:r:kernel:s0
+=== su -c getenforce ===
+Permissive

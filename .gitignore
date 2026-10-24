@@ -1,0 +1,12 @@
+.DS_Store
+__pycache__/
+*.pyc
+*.log
+runs/
+vendor/
+payload/build/
+*.img
+*.bin
+*.apk
+*.tar.gz
+*.zip

