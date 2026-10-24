@@ -2,6 +2,8 @@
 
 ## Download releases
 
+The current prebuilt payload is also published in [`payload-vote6b`](https://github.com/BH3GEI/honor-aap-an00-root-skill/releases/tag/payload-vote6b).
+
 All firmware files are published in [`firmware-v175`](https://github.com/BH3GEI/honor-aap-an00-root-skill/releases/tag/firmware-v175):
 
 - `boot_a_175.img`
@@ -44,7 +46,10 @@ b855b9c4f53faec706f86ce04d00f11de7b6fdbe2a43e8fbc902e05312a935ca  vbmeta_a_175.i
 
 ```text
 d97f486356914a10f3b7059fea9c39ed85e53fb295098da85aa414003d32b741  preload_honor_vote5.so
+e7e2a288e56978f59b7680053f2f5e657b461498bc2563c45ff4322c0977217b  preload_honor_vote6b.so
 ```
+
+The default runner uses `preload_honor_vote6b.so`, which additionally rejects an unexpected logger pointer or a boot_id/tracefs base mismatch. The earlier vote5 artifact is retained as a fallback.
 
 Verify on macOS:
 

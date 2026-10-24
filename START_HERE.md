@@ -141,6 +141,7 @@ PATH=/data/adb/m:$PATH su -c id
 
 ## Release 内容
 
+- `payload-vote6b`：带 boot_id 与 tracefs 基址一致性校验的预编译 payload。
 - `firmware-v175`：boot、未压缩 Image、init_boot、vendor_boot、dtbo、vbmeta 和 SHA-256。
 - `magisk-runtime-v1`：Magisk 应用、daemon 和 SHA-256。
 

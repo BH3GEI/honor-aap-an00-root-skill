@@ -24,6 +24,8 @@ ARTIFACTS = [
      "d9046c74b78111f7047cfe1e6d74fcb204853e181116a58f76470a296979e639"),
     ("firmware-v175", "vbmeta_a_175.img", "firmware/vbmeta_a_175.img",
      "b855b9c4f53faec706f86ce04d00f11de7b6fdbe2a43e8fbc902e05312a935ca"),
+    ("payload-vote6b", "preload_honor_vote6b.so", "prebuilt/preload_honor_vote6b.so",
+     "e7e2a288e56978f59b7680053f2f5e657b461498bc2563c45ff4322c0977217b"),
     ("magisk-runtime-v1", "Magisk-refresh.apk", "magisk-runtime/Magisk-refresh.apk",
      "fec1bf3c2d8c1ab04511b6128af1738cc9e7f371fab5c4a1e70406f1459914be"),
     ("magisk-runtime-v1", "magisk", "magisk-runtime/magisk",

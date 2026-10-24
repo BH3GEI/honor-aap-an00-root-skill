@@ -113,7 +113,7 @@ honor-aap-an00-root-skill/
 │   ├── SKILL.md                 # canonical agent workflow
 │   └── reference.md             # exploit architecture and troubleshooting
 ├── payload/                     # modified Linuxoid source and Makefile
-├── prebuilt/                    # verified vote5 payload + SHA-256
+├── prebuilt/                    # verified vote5 and vote6b payloads + SHA-256
 ├── scripts/                     # check/build/run/verify utilities
 ├── tools/                       # offset generation and diagnostics
 ├── evidence/                    # successful run and independent verification

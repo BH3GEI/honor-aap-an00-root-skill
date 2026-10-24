@@ -6,6 +6,7 @@ cd "$ROOT"
 SERIAL="${HONOR_SERIAL:-${ANDROID_SERIAL:-}}"
 BUILD=0
 DARK_SEC=300
+PREBUILT_NAME="preload_honor_vote6b.so"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -s|--serial) SERIAL="$2"; shift 2 ;;
@@ -33,10 +34,10 @@ if [[ "$BUILD" -eq 1 ]]; then
   ./scripts/build.sh
   HOST_SO="payload/build/bin/preload.so"
 else
-  HOST_SO="prebuilt/preload_honor_vote5.so"
+  HOST_SO="prebuilt/$PREBUILT_NAME"
 fi
 test -s "$HOST_SO"
-EXPECTED=$(awk '$2=="preload_honor_vote5.so" {print $1}' prebuilt/SHA256SUMS.txt)
+EXPECTED=$(awk -v name="$PREBUILT_NAME" '$2==name {print $1}' prebuilt/SHA256SUMS.txt)
 if [[ "$BUILD" -eq 0 ]]; then
   ACTUAL=$(if command -v sha256sum >/dev/null 2>&1; then sha256sum "$HOST_SO" | awk '{print $1}'; else shasum -a 256 "$HOST_SO" | awk '{print $1}'; fi)
   [[ "$ACTUAL" == "$EXPECTED" ]] || { echo "prebuilt hash mismatch" >&2; exit 4; }
