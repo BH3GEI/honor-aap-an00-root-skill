@@ -3,6 +3,8 @@ __pycache__/
 *.pyc
 *.log
 runs/
+firmware/
+magisk-runtime/
 vendor/
 payload/build/
 *.img
