@@ -1,0 +1,23 @@
+selinux_state size = 128 (0x80)
+  byte   bits  field
+0x0000     0  enforcing
+0x0001     8  initialized
+0x0002    16  policycap
+0x000b    88  android_netlink_route
+0x000c    96  android_netlink_getneigh
+0x0010   128  status_page
+0x0018   192  status_lock
+0x0048   576  policy
+0x0050   640  policy_mutex
+
+enforcing byte offset = 0x0
+an 8-byte write at 0x0 overwrites: ['enforcing', 'initialized', 'policycap']
+
+layout detail around the write:
+  +0    enforcing  <-- write base
+  +1    initialized  <-- covered
+  +2    policycap  <-- covered
+  +11   android_netlink_route
+  +12   android_netlink_getneigh
+  +16   status_page
+  +24   status_lock

@@ -1749,6 +1749,7 @@ def build_header(
         address(macro, slides[key])
     address("SLIDE_INIT_TASK_IMAGE", symbol("init_task"))
     address("SLIDE_ROOT_TASK_GROUP_IMAGE", symbol("root_task_group"))
+    address("SYSCTL_BOOTID_IMAGE", symbol("sysctl_bootid"))
 
     h.section("waiter and fake task fields")
     waiter_fields = {

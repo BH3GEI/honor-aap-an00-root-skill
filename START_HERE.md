@@ -115,6 +115,15 @@ PATH=/data/adb/m:$PATH su -c id
 
 当前没有已验证的独立开机自启动持久化方案。不要手动刷写 boot、init_boot 或 vbmeta。
 
+判断依据可以随时用只读脚本复核：
+
+```bash
+./scripts/check_persistence.sh
+```
+
+该脚本读取 bootloader 状态、AVB 状态、verity 模式、`ro.debuggable`、`/data` 挂载选项，
+逐项列出不可自启动的原因。实测输出见 `evidence/persistence_boundary.txt`。
+
 ## 7. 常见问题
 
 ### 手机桌面没有 Magisk 图标
@@ -127,7 +136,19 @@ PATH=/data/adb/m:$PATH su -c id
 
 ### Magisk 应用打不开
 
-提权后新启动的应用可能遇到系统级 SharedMemory 异常。命令行 root 不受影响。可以先重启并打开 Magisk，再运行 `./scripts/reproduce.sh`，让应用进程在提权前已经存在。
+当前实测 Magisk 的异常为 `UninitializedPropertyAccessException`，位置是 `MainActivity.onResume`
+中访问尚未初始化的 `binding`。命令行 root 和 su 不受影响，原因未查明。
+
+### 提权后应用启动问题（已修复）
+
+旧载荷会把 `random_table` 中 boot_id 的 `data` 指针改到 per-CPU `entry_task`，导致不同进程
+计算出不同的 `/dev/ashmem<uuid>` 路径，随后在 `bindApplication` 中失败。只根据 shell 看到的
+UUID 补一个节点不能覆盖所有应用。
+
+当前默认 `preload_honor_vote6b_bootidfix.so` 在最后一次 oracle 读取后恢复该指针，
+`scripts/run_root.sh` 再调用 `scripts/fix_ashmem_node.sh` 为稳定后的 UUID 创建节点。
+44/45 个第三方应用已通过冷启动测试；唯一失败项是上述 Magisk 自身异常。
+细节见 `docs/BOOTIDFIX-20261105.md` 和 `docs/TROUBLESHOOTING.md`。
 
 ### 下载失败或哈希不匹配
 
@@ -141,7 +162,7 @@ PATH=/data/adb/m:$PATH su -c id
 
 ## Release 内容
 
-- `payload-vote6b`：带 boot_id 与 tracefs 基址一致性校验的预编译 payload。
+- 仓库内 `prebuilt/preload_honor_vote6b_bootidfix.so`：默认载荷，包含 KASLR 校验和 boot_id 指针恢复。
 - `firmware-v175`：boot、未压缩 Image、init_boot、vendor_boot、dtbo、vbmeta 和 SHA-256。
 - `magisk-runtime-v1`：Magisk 应用、daemon 和 SHA-256。
 

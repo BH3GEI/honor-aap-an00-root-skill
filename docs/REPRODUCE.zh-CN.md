@@ -24,6 +24,10 @@
 4. 不要更换手机型号或固件后直接运行；偏移和调用点表与精确内核绑定。
 5. 发射期间存在 ADB 静默窗口，不要插拔 USB 或执行其他 ADB 命令。
 
+6. 当前默认 bootidfix 载荷会在提权后恢复 boot_id 的 `ctl_table.data` 指针，并创建匹配的
+   ashmem 节点。普通应用的启动问题已修复；44/45 个第三方应用通过冷启动测试，
+   Magisk 应用另有一个 `binding` 初始化异常。细节见 `BOOTIDFIX-20261105.md`。
+
 ## 3. 主机依赖
 
 需要：
@@ -87,10 +91,10 @@ export HONOR_SERIAL=<你的adb序列号>
 6. 保存完整日志到 `runs/`。
 7. 成功报告后使用新的 ADB 命令独立复验。
 
-预编译 payload 的 SHA-256：
+预编译 payload 的 SHA-256（默认 `preload_honor_vote6b_bootidfix.so`）：
 
 ```text
-d97f486356914a10f3b7059fea9c39ed85e53fb295098da85aa414003d32b741
+ecdcdfcfdc5ea9d5a56286b1f5367315d521d0fe738c03a63ceaa9cebaf658e2
 ```
 
 成功结果包含：

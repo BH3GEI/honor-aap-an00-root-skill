@@ -6,6 +6,8 @@ A reproducible, source-available implementation of **temporary userspace root** 
 
 **Verified result:** `uid=0(root)`, `u:r:kernel:s0`, SELinux `Permissive`, and a working `su` client/daemon. No boot image is patched or flashed. Root does not persist across reboot.
 
+**2026-11-05 update:** the default `bootidfix` payload restores the boot_id `ctl_table.data` pointer after the direct reads and then creates the matching ashmem node. This fixes the post-root app launch failures. In the latest test, 44/45 third-party apps launched successfully; the Magisk app has a separate `binding` initialization exception. See [BOOTIDFIX-20261105.md](docs/BOOTIDFIX-20261105.md).
+
 ## Supported target
 
 | Property | Required value |
@@ -70,6 +72,7 @@ The output must say `exact supported firmware` before continuing.
 3. Verifies the prebuilt SHA-256 and pushes it to `/data/local/tmp/preload_honor.so`.
 4. Runs one exploit attempt with an ADB-silent window.
 5. Independently verifies root when the payload reports success.
+6. Restores the boot_id table pointer and creates the matching ashmem node so newly started apps can open.
 
 A failed attempt can leave the phone rebooting. Do not start a second runner while another is active.
 
@@ -113,8 +116,8 @@ honor-aap-an00-root-skill/
 │   ├── SKILL.md                 # canonical agent workflow
 │   └── reference.md             # exploit architecture and troubleshooting
 ├── payload/                     # modified Linuxoid source and Makefile
-├── prebuilt/                    # verified vote5 and vote6b payloads + SHA-256
-├── scripts/                     # check/build/run/verify utilities
+├── prebuilt/                    # verified vote5, vote6b and bootidfix payloads + SHA-256
+├── scripts/                     # check/build/run/verify utilities, check_persistence.sh
 ├── tools/                       # offset generation and diagnostics
 ├── evidence/                    # successful run and independent verification
 ├── docs/                        # Chinese reproduction, firmware, proof

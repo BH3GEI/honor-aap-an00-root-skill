@@ -1,0 +1,80 @@
+args: [-p, com.quark.browser, 1]
+ arg: "-p"
+ arg: "com.quark.browser"
+ arg: "1"
+data="com.quark.browser"
+=== FROZEN pid=13115 cmd=com.quark.browser                                                                                  
+libcutils base: 0x749f985000
+cached-path: '@ù_@'
+raw32: 68 16 40 f9 5f 40 00 f1 a8 83 1f f8 69 00 00 54 00 00 80 92 46 00 00 14 00 e4 00 6f e0 03 00 ad
+mem[0x74f3610000+0x25a10]: '/dev/ashmemc0c28151-89ff-ffff-58b5-b02ad4ffffff'
+status: Name:	re-initialized>
+status: Umask:	0077
+status: State:	T (stopped)
+status: Tgid:	13115
+status: Ngid:	0
+status: Pid:	13115
+status: PPid:	1889
+status: TracerPid:	0
+status: Uid:	10252	10252	10252	10252
+status: Gid:	10252	10252	10252	10252
+status: FDSize:	128
+status: Groups:	3001 3002 3003 9997 20252 50252 12801023 12809997 12901023 12909997 13001023 13009997 13101023 13109997 13201023 13209997 
+status: Kthread:	0
+status: VmPeak:	17023388 kB
+status: VmSize:	17023388 kB
+status: VmLck:	       0 kB
+status: VmPin:	       0 kB
+status: VmHWM:	   89780 kB
+status: VmRSS:	   89780 kB
+status: RssAnon:	   57240 kB
+status: RssFile:	   32284 kB
+status: RssShmem:	     256 kB
+status: VmData:	 1830448 kB
+status: VmStk:	    8192 kB
+status: VmExe:	       4 kB
+status: VmLib:	  170796 kB
+status: VmPTE:	    1332 kB
+status: VmSwap:	       0 kB
+status: CoreDumping:	0
+status: THP_enabled:	1
+status: untag_mask:	0xffffffffffffff
+status: Threads:	14
+status: SigQ:	0/56586
+status: SigPnd:	0000000000000000
+status: ShdPnd:	0000000000000000
+status: SigBlk:	0000000080001204
+status: SigIgn:	0000000000001001
+status: SigCgt:	0000126e400084f8
+status: CapInh:	0000000000000000
+status: CapPrm:	0000000000000000
+status: CapEff:	0000000000000000
+status: CapBnd:	0000000000000000
+status: CapAmb:	0000000000000000
+status: NoNewPrivs:	0
+status: Seccomp:	2
+status: Seccomp_filters:	1
+status: Speculation_Store_Bypass:	thread vulnerable
+status: SpeculationIndirectBranch:	unknown
+status: Cpus_allowed:	ff
+status: Cpus_allowed_list:	0-7
+status: Mems_allowed:	1
+status: Mems_allowed_list:	0
+status: voluntary_ctxt_switches:	13
+status: nonvoluntary_ctxt_switches:	4
+domain: u:r:untrusted_app_30:s0:c252,c256,c512,c768
+mount: 17856 17855 0:19 / /dev rw,nosuid,relatime master:2 - tmpfs tmpfs rw,seclabel,size=7682976k,nr_inodes=1920744,mode=755
+ns-open /dev/ashmem: OK fd=3 rdev=0xa7c mode=020666
+ns-ioctl ASHMEM_GET_SIZE: ret=0 errno=0 (ok)
+appuid-open /dev/ashmem: OK uid=10252 fd=3
+appuid-ioctl GET_SIZE: ret=0 errno=0
+computed-path: /dev/ashmem00d92645-80ff-ffff-58b5-b02ad4ffffff
+computed-open: FAILED errno=2 (No such file or directory)
+ns-/dev entry: ashmem4096d929-80ff-ffff-58b5-b02ad4ffffff
+ns-/dev entry: ashmem_ignore_unset_prot_exec
+ns-/dev entry: ashmem_unpinning_enable
+ns-/dev entry: ashmem6415c881-c252-47f7-a537-3a9411882d39
+ns-/dev entry: ashmem
+ns-/dev entry: ashmem_ignore_unset_prot_read
+ns-stat /proc/13115/root/dev/ashmem: FAILED errno=2 (No such file or directory)
+=== DONE

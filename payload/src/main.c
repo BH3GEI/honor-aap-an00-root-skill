@@ -557,9 +557,18 @@ static int run_direct_root_stage(void) {
     return 0;
   }
 
+  if (!direct_trigger_write64("restore_boot_id_ctl_data",
+                              canon_addr(SLIDE_RANDOM_BOOT_ID_DATA_IMAGE),
+                              canon_addr(SYSCTL_BOOTID_IMAGE), 1, &write_idx)) {
+    pr_warning("boot_id ctl_table.data restore failed\n");
+  } else {
+    pr_success("boot_id ctl_table.data restored=%016zx\n",
+               canon_addr(SYSCTL_BOOTID_IMAGE));
+  }
+
   if (!restore_initial_affinity()) {
-    pr_error("restore initial CPU affinity failed errno=%d\n", errno);
-    return 0;
+    pr_warning("restore initial CPU affinity failed errno=%d; continuing on cpu=%d\n",
+               errno, direct_root_cpu);
   }
 
   size_t policy_size = 0;

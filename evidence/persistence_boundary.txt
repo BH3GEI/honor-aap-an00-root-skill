@@ -1,0 +1,36 @@
+# Persistence boundary check
+# date: 2026-10-24 11:50:56 PDT
+# device: AVXB6R5C19000481 (AAP-AN00 10.0.0.175)
+
+[device] model=AAP-AN00 display=AAP-AN00 10.0.0.175(C00E170R104P3)
+[device] build_type=user tags=release-keys debuggable=0
+[device] uptime_s=8999.20
+[boot]   flash_locked=1 vbmeta_state=locked verified_boot=green verity=enforcing
+[data]   /dev/block/dm-71 on /data type f2fs (rw,lazytime,seclabel,nosuid,nodev,noatime,background_gc=on,nogc_merge,discard,discard_unit=block,user_xattr,inline_xattr,acl,inline_data,inline_dentry,flush_merge,barrier,extent_cache,age_extent_cache,mode=adaptive,active_logs=6,reserve_root=32768,resuid=0,resgid=1065,inlinecrypt,alloc_mode=default,checkpoint_merge,fsync_mode=nobarrier,compress_algorithm=lz4,compress_log_size=3,compress_mode=user,compress_cache,memory=normal,errors=continue,lookup_mode=perf)
+[root]   active=1
+[magisk-dir] /data/adb/modules
+[magisk-dir] /data/adb/post-fs-data.d
+[magisk-dir] /data/adb/service.d
+[magisk] magiskd_processes=1 version=30.7:MAGISK:R
+[su]     -rwxr-xr-x 1 root root 15312 2026-10-25 00:23 /data/local/tmp/su
+
+[boundary] persistence requires one of: unlocked bootloader with patched boot, or a root-at-boot code path on this firmware.
+[boundary] neither is available in the state above.
+
+[reasons]
+  - bootloader locked (ro.boot.flash.locked=1); boot/init_boot/vbmeta cannot be replaced
+  - AVB state green; modified boot partitions fail verification
+  - dm-verity enforcing; /system and /vendor are read-only
+  - user build with ro.debuggable=0; 'adb root' is unavailable
+  - /data mounted nosuid; a setuid binary on /data cannot elevate
+  - /data mounted nodev
+  - stock init starts no script from /data; magiskd needs root to start, so it cannot bootstrap itself
+  - temp_su.sock and the su binary under /apex live in tmpfs and disappear on reboot
+
+[conclusion] after a reboot run ./scripts/run_root.sh and ./scripts/start_magisk.sh again.
+
+--- runtime root and Magisk, after scripts/start_magisk.sh ---
+30.7:MAGISK:R
+30700
+uid=0(root) gid=0(root) groups=0(root) context=u:r:kernel:s0
+Permissive

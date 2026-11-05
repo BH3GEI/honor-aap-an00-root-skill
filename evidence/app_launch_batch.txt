@@ -1,0 +1,49 @@
+OK com.unity.megacity.metro pid=22124
+OK com.quark.browser pid=22225
+OK com.sdu.didi.psnger pid=22559
+OK com.tencent.tmgp.pubgmhd pid=22637
+OK com.tencent.nrc pid=22956
+OK com.HoYoverse.hkrpgoversea pid=23334
+OK io.github.hgamey.refbench pid=23476
+OK com.miHoYo.hkrpg pid=23595
+OK com.qiyi.video pid=23888
+OK com.xingin.xhs pid=24741
+OK com.jingdong.app.mall pid=25374
+OK com.man4fun.rollingegg.minigame.mini pid=25503
+OK com.xunmeng.pinduoduo pid=25943
+OK com.baidu.BaiduMap pid=26742
+OK com.eg.android.AlipayGphone pid=26829
+OK com.Qunar pid=26934
+OK com.huawei.gameperceptio pid=27307
+OK com.zhihu.android pid=27728
+OK com.dianping.v1 pid=28173
+OK com.kurogame.wutheringwaves.global pid=28614
+OK com.taobao.idlefish pid=28894
+OK com.smile.gifmaker pid=29503
+OK com.miHoYo.GenshinImpact pid=30585
+OK com.baidu.searchbox pid=30934
+OK com.tencent.mobileqq pid=31150
+OK ctrip.android.view pid=31512
+OK com.baidu.netdisk pid=32078
+OK com.hihonor.android.honorsuite pid=32145
+OK com.xiaoji.egggame pid=3220532281
+OK com.tencent.tmgp.sgame pid=32498
+EXITED com.topjohnwu.magisk
+OK com.xs.fm pid=32744
+OK com.phoenix.read pid=513
+OK tv.danmaku.bili pid=772
+OK com.netease.l22.honor pid=1089
+OK com.huawei.evaluation pid=1679
+OK com.ss.android.article.news pid=1825
+OK com.tencent.tmgp.dfm pid=2235
+OK com.taobao.taobao pid=2806
+OK com.ss.android.ugc.aweme pid=4536
+OK com.hypergryph.endfield pid=5997
+OK com.alibaba.wireless pid=6406
+OK com.dragon.read pid=6626
+OK com.miHoYo.Yuanshen pid=8746
+OK com.netease.sky.honor pid=9153
+SUMMARY pass=44 fail=1
+--- failure logs ---
+11-05 13:26:35.585 32582 32582 E AndroidRuntime: FATAL EXCEPTION: main
+11-05 13:26:35.951 32682 32682 E AndroidRuntime: FATAL EXCEPTION: main

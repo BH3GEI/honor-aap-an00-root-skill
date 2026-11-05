@@ -6,7 +6,7 @@ cd "$ROOT"
 SERIAL="${HONOR_SERIAL:-${ANDROID_SERIAL:-}}"
 BUILD=0
 DARK_SEC=300
-PREBUILT_NAME="preload_honor_vote6b.so"
+PREBUILT_NAME="${PREBUILT_NAME:-preload_honor_vote6b_bootidfix.so}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -s|--serial) SERIAL="$2"; shift 2 ;;
@@ -62,6 +62,9 @@ RC=${PIPESTATUS[0]}
 set -e
 if [[ "$RC" -eq 0 ]]; then
   ./scripts/verify_root.sh --serial "$SERIAL"
+  # Exploit clobbers random_boot_id_data; recreate the ashmem device node
+  # libcutils derives from it, so newly started apps keep working.
+  ./scripts/fix_ashmem_node.sh -s "$SERIAL" || true
 else
   echo "run failed rc=$RC; inspect $LOG and the newest /data/local/tmp/sy_*.log" >&2
 fi

