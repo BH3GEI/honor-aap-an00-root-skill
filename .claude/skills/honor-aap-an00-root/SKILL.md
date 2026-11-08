@@ -167,6 +167,20 @@ Temporary root and its daemon are gone after a reboot. The ordinary Android syst
 ./scripts/run_root.sh
 ```
 
+Persistence is not implemented. On the supported firmware the bootloader is locked
+(`ro.boot.flash.locked=1`), AVB is `green`, verity is `enforcing`, the build is `user` with
+`ro.debuggable=0`, and `/data` is mounted `nosuid,nodev`. Stock init runs no script from
+`/data`, so magiskd cannot bootstrap itself. Verify the current state on any target with:
+
+```bash
+./scripts/check_persistence.sh
+```
+
+The embedded su daemon and runtime Magisk are separate paths. If `magisk -V` reports a
+daemon connection failure while `/data/local/tmp/su -c id` still returns root, magiskd is
+not running; `./scripts/start_magisk.sh` restores it. Evidence:
+`evidence/persistence_boundary.txt`.
+
 ## Reference
 
 Read `reference.md` for the inline-futex capacity problem, res encoding, KASLR voting, direct-stage address domains, failure diagnosis, and regeneration procedure.

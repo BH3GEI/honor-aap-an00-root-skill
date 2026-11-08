@@ -112,3 +112,23 @@ cd app
 ```
 
 `/data/adb/m` 中的二进制和应用数据可以保留，但 stock init 不会在该目录执行启动脚本。`/data` 的 `nosuid` 挂载也排除了 setuid 自启动方式。当前没有已验证的独立开机自启动持久化方案；修改 boot/init_boot/vbmeta 在锁定 AVB 下不能直接用于持久化。
+
+2026-10-25 在目标机 AAP-AN00（`AVXB6R5C19000481`）实测的边界条件：
+
+| 项目 | 实测值 | 对持久化的影响 |
+| --- | --- | --- |
+| `ro.boot.flash.locked` | `1` | boot、init_boot、vbmeta 不能替换 |
+| `ro.boot.verifiedbootstate` | `green` | 修改后的 boot 分区无法通过校验 |
+| `ro.boot.vbmeta.device_state` | `locked` | 与上一行同源 |
+| `ro.boot.veritymode` | `enforcing` | `/system`、`/vendor` 只读 |
+| `ro.build.type`、`ro.debuggable` | `user`、`0` | `adb root` 不可用 |
+| `/data` 挂载选项 | `nosuid,nodev` | `/data` 上的 setuid 二进制无法提权 |
+| `/data/adb/post-fs-data.d` | 存在，stock init 不执行 | magiskd 需要先有 root 才能启动 |
+| `temp_su.sock`、`/apex/com.android.virt/bin/su` | 位于 tmpfs | 重启后消失 |
+
+复核脚本：`./scripts/check_persistence.sh`，只读，不做任何修改。实测输出见
+`evidence/persistence_boundary.txt`。
+
+内嵌 su daemon 与 runtime Magisk 是两条独立路径。若 `magisk -V` 返回 daemon 连接失败，
+而 `/data/local/tmp/su -c id` 仍返回 root，说明内嵌 su daemon 存活、magiskd 未运行，
+执行一次 `./scripts/start_magisk.sh` 即可恢复。

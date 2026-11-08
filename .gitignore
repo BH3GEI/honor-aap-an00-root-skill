@@ -12,3 +12,9 @@ payload/build/
 *.apk
 *.tar.gz
 *.zip
+*.apk
+*.so
+*.png
+debug.keystore
+app/build/
+build/

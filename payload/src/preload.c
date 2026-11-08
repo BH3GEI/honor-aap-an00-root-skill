@@ -421,6 +421,7 @@ static void open_sync_log(void) {
   g_sync_log_fd = fd;
 }
 
+#ifndef HONOR_STANDALONE
 __attribute__((constructor)) static void load(void) {
   static int started;
   if (started) {
@@ -450,3 +451,4 @@ __attribute__((constructor)) static void load(void) {
   pr_success("preload starting pid=%d\n", getpid());
   run_exploit(1, argv);
 }
+#endif

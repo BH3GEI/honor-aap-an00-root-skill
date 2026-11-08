@@ -5,6 +5,7 @@ TARGET_HEADER ?= src/target.h
 
 EMBED_SU := $(EMBEDDIR)/su_daemon_aarch64_pie
 PRELOAD := $(OUTDIR)/preload.so
+STANDALONE := $(OUTDIR)/honor-root-standalone
 
 CORE_SRCS := \
   src/main.c \
@@ -13,6 +14,7 @@ CORE_SRCS := \
   src/fops.c \
   src/pipe.c
 PRELOAD_SRCS := $(CORE_SRCS) src/preload.c src/su_blob.S
+STANDALONE_SRCS := $(CORE_SRCS) src/preload.c src/su_blob.S src/standalone.c
 
 .DEFAULT_GOAL := preload
 
@@ -76,6 +78,8 @@ TARGET_CFLAGS := -DTARGET_CONFIG_H=\"target.h\"
 
 all: preload
 
+standalone: $(STANDALONE)
+
 preload: $(TARGET_HEADER) $(PRELOAD)
 
 $(TARGET_HEADER):
@@ -96,6 +100,11 @@ $(PRELOAD): $(PRELOAD_SRCS) $(EMBED_SU) $(TARGET_HEADER) src/offset.h src/common
 	$(TARGET_CC) $(TARGET_FLAGS) $(SO_CFLAGS) $(WARN_CFLAGS) $(TARGET_CFLAGS) \
 	  $(PRELOAD_SRCS) $(TARGET_COMMON_LDFLAGS) \
 	  -shared -o $@ -pthread
+
+$(STANDALONE): $(STANDALONE_SRCS) $(EMBED_SU) $(TARGET_HEADER) src/offset.h src/common.h src/kernelsnitch/*.h | $(OUTDIR)
+	$(TARGET_CC) $(TARGET_FLAGS) $(PIE_CFLAGS) $(WARN_CFLAGS) $(TARGET_CFLAGS) \
+	  -DHONOR_STANDALONE $(STANDALONE_SRCS) $(TARGET_PIE_LDFLAGS) \
+	  -o $@ -pthread
 
 info:
 	@echo "TARGET_HEADER=$(TARGET_HEADER)"
