@@ -32,12 +32,17 @@ A successful run installs an embedded su client and daemon, produces `uid=0(root
 5. Do not flash or wipe any partition.
 6. Do not run the supplied payload on a different kernel build.
 7. Keep the upstream signing material in the ignored vendor checkout; do not commit it.
+8. The default bootidfix payload restores the boot_id `ctl_table.data` pointer and creates the
+   matching ashmem node after the run; app launching keeps working (44/45 third-party apps
+   verified). The older vote5/vote6b payloads disable app launching until reboot. See
+   `docs/BOOTIDFIX-20261105.md`.
 
 ## Artifacts
 
 | Path | Purpose |
 |---|---|
-| `prebuilt/preload_honor_vote5.so` | Exact payload used in the successful run |
+| `prebuilt/preload_honor_vote6b.so` | Default payload; vote5 plus base-consistency validation |
+| `prebuilt/preload_honor_vote5.so` | Payload of the first fully verified root run (retained as fallback) |
 | `prebuilt/SHA256SUMS.txt` | Prebuilt integrity check |
 | `payload/` | Complete modified source and build system |
 | `scripts/run_root.sh` | Device check, push, one attempt, verification |
@@ -145,7 +150,7 @@ export ANDROID_NDK_HOME=/absolute/path/to/android-ndk-r29
 ./scripts/run_root.sh --build
 ```
 
-`build.sh` runs `make -C payload preload` and produces `payload/build/bin/preload.so`. The runner uses this binary instead of the preserved vote5 artifact.
+`build.sh` runs `make -C payload preload` and produces `payload/build/bin/preload.so`. The runner uses this binary instead of the preserved prebuilt artifact.
 
 The source tree already contains the generated target offsets and KASLR site table. The original kernel image is not required for an exact-firmware rebuild.
 

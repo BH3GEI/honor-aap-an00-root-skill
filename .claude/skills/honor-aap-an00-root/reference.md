@@ -4,7 +4,9 @@
 
 The working target is the Honor 500 AAP-AN00 / HNAAP with Qualcomm SM8850 and the 6.12.38 Android 16 GKI kernel. The bootloader remains locked. The included solution is a runtime credential and SELinux modification chain with a temporary su daemon.
 
-The successful vote5 run proved all of the following in one boot:
+The first fully verified run used vote5; the current default payload is vote6b + boot_id pointer
+restore (`preload_honor_vote6b_bootidfix.so`), which adds a boot_id/tracefs base-consistency
+check and keeps app launching working after the run. Both establish all of the following in one boot:
 
 1. Runtime KASLR calibration from tracefs.
 2. Independent slide confirmation through `random_boot_id_data`.
@@ -138,10 +140,11 @@ The boot_id oracle validates both a sidecar qword and one raw byte before accept
 
 `payload/Makefile` compiles the preload shared object for AArch64 Android API 35. `src/su_blob.S` embeds `payload/embed/su_daemon_aarch64_pie` using `.incbin`.
 
-The supplied `src/target.h` and `src/ktext_sites.h` mean an exact-firmware rebuild does not need the original boot image. `prebuilt/preload_honor_vote5.so` preserves the exact tested artifact with SHA-256:
+The supplied `src/target.h` and `src/ktext_sites.h` mean an exact-firmware rebuild does not need the original boot image. Both prebuilt artifacts are preserved with their SHA-256 values in `prebuilt/SHA256SUMS.txt`:
 
 ```text
-d97f486356914a10f3b7059fea9c39ed85e53fb295098da85aa414003d32b741
+d97f486356914a10f3b7059fea9c39ed85e53fb295098da85aa414003d32b741  preload_honor_vote5.so
+e7e2a288e56978f59b7680053f2f5e657b461498bc2563c45ff4322c0977217b  preload_honor_vote6b.so
 ```
 
 ## 8. Regenerating the KASLR table

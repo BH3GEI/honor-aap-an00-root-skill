@@ -1,0 +1,62 @@
+=== app pid lines (rooted) ===
+10-25 23:27:47.284 18587 18587 I Zygote  : MountEmulatedStorage
+10-25 23:27:47.284 18587 18587 I Zygote  : mount_data_dirs
+10-25 23:27:47.284 18587 18587 I Zygote  : mount_storage_dirs
+10-25 23:27:47.284 18587 18587 I Zygote  : PreInitializeNativeBridge
+10-25 23:27:47.287 18587 18587 I Zygote  : CallStaticVoidMethod
+10-25 23:27:47.287 18587 18587 I totemweather:ui: Using CollectorTypeCC GC.
+10-25 23:27:47.287 18587 18587 I totemweather:ui: Reinit property: dalvik.vm.checkjni= false
+10-25 23:27:47.287 18587 18587 I totemweather:ui: ReInitProperties: persist.vm.debug.dumpapi= false
+10-25 23:27:47.288 18587 18587 E totemweather:ui: Not starting debugger since process cannot load the jdwp agent.
+10-25 23:27:47.289 18587 18587 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-
+10-25 23:27:47.290 18587 18595 I totemweather:ui: Is commercial user: 1
+10-25 23:27:47.290 18587 18587 E [VipSchedProxy:]: Vip Success open /proc/vip/ioctl
+10-25 23:27:47.290 18587 18587 I HwActivityThreadImpl: initHwArgs begin, args = [], length = 0
+10-25 23:27:47.290 18587 18587 I ActivityThread: initHwArgs result ok for mw or virtual
+10-25 23:27:47.291 18587 18587 D ActivityThread: Attach thread to application
+10-25 23:27:47.297 18587 18596 E ashmem  : Unable to open ashmem device: No such file or directory
+10-25 23:27:47.297 18587 18596 W Binder  : Caught a RuntimeException from the binder stub implementation.
+10-25 23:27:47.297 18587 18596 W Binder  : java.lang.IllegalArgumentException: FileDescriptor is not a valid ashmem fd
+10-25 23:27:47.297 18587 18596 W Binder  : 	at android.os.SharedMemory.<init>(SharedMemory.java:61)
+10-25 23:27:47.297 18587 18596 W Binder  : 	at android.os.SharedMemory.<init>(Unknown Source:0)
+10-25 23:27:47.297 18587 18596 W Binder  : 	at android.os.SharedMemory$1.createFromParcel(SharedMemory.java:316)
+10-25 23:27:47.297 18587 18596 W Binder  : 	at android.os.SharedMemory$1.createFromParcel(SharedMemory.java:312)
+10-25 23:27:47.297 18587 18596 W Binder  : 	at android.os.Parcel.readTypedObject(Parcel.java:4346)
+10-25 23:27:47.297 18587 18596 W Binder  : 	at android.app.IApplicationThread$Stub.onTransact(IApplicationThread.java:1149)
+10-25 23:27:47.297 18587 18596 W Binder  : 	at android.os.Binder.execTransactInternal(Binder.java:1464)
+10-25 23:27:47.297 18587 18596 W Binder  : 	at android.os.Binder.execTransact(Binder.java:1401)
+10-25 23:27:47.300 18587 18587 E TransactionExecutor: Failed to execute the transaction: tId:180050323 ClientTransaction{
+10-25 23:27:47.300 18587 18587 E TransactionExecutor: tId:180050323   transactionItems=[
+10-25 23:27:47.300 18587 18587 E TransactionExecutor: tId:180050323     LaunchActivityItem{activityToken=android.os.BinderProxy@28e9222,intent=Intent { act=android.intent.action.MAIN cat=[android.inte
+10-25 23:27:47.300 18587 18587 E TransactionExecutor: tId:180050323     ResumeActivityItem{mActivityToken=android.os.BinderProxy@28e9222,procState=-1,isForward=true,shouldSendCompatFakeFocus=false}
+10-25 23:27:47.300 18587 18587 E TransactionExecutor: tId:180050323     Target activity: Not found for token: android.os.BinderProxy@28e9222
+10-25 23:27:47.300 18587 18587 E TransactionExecutor: tId:180050323   ]
+10-25 23:27:47.300 18587 18587 E TransactionExecutor: tId:180050323 }
+10-25 23:27:47.300 18587 18587 D AndroidRuntime: Shutting down VM
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: FATAL EXCEPTION: main
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: PID: 18587
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: java.lang.NullPointerException: Attempt to invoke virtual method 'android.content.res.Resources android.content.Context.getResources()' on a null objec
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at android.app.servertransaction.ClientTransactionListenerController.onContextConfigurationPreChanged(ClientTransactionListenerController.java:197)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at android.app.ConfigurationController.handleConfigurationChanged(ConfigurationController.java:174)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:5517)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at android.app.servertransaction.LaunchActivityItem.execute(LaunchActivityItem.java:237)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at android.app.servertransaction.TransactionExecutor.executeNonLifecycleItem(TransactionExecutor.java:148)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at android.app.servertransaction.TransactionExecutor.executeTransactionItems(TransactionExecutor.java:118)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:89)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:3574)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:124)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:263)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:360)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:10873)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:648)
+10-25 23:27:47.300 18587 18587 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1012)
+10-25 23:27:47.306 18587 18587 I HiView  : Begin report 1002
+10-25 23:27:47.306 18587 18587 D HiEvent : event mTime is 0, set mTime = 1792942067306
+10-25 23:27:47.306 18587 18587 I HiEvent : Flatten done: 1002
+10-25 23:27:47.306 18587 18587 I Process : Sending signal. PID: 18587 SIG: 9
+=== events (rooted) ===
+10-25 23:27:47.284  3427  3498 I am_proc_start: [0,18587,10056,com.hihonor.android.totemweather:ui,next-top-activity,{com.hihonor.android.to
+10-25 23:27:47.291  3427  5192 I am_proc_bound: [0,18587,com.hihonor.android.totemweather:ui]
+10-25 23:27:47.302  3427  5453 I am_crash: [18587,0,com.hihonor.android.totemweather:ui,-1463271739,java.lang.NullPointerException,Attempt t
+10-25 23:27:47.314  3427  5455 I am_proc_died: [0,18587,com.hihonor.android.totemweather:ui,0,2]
